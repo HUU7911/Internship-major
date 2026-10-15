@@ -479,7 +479,11 @@ Sau khi hệ thống sẵn sàng, thực hiện kiểm thử theo thứ tự:
 - Kiểm tra các biến môi trường và dependency trước khi xử lý lỗi khởi động.
 - Thường xuyên cập nhật tài liệu khi API, port hoặc luồng nghiệp vụ thay đổi.
 
-## 9. Kết luận
+## 9. Lưu ý khi làm việc
+
+- Mọi người làm việc theo task được giao trước khi làm tạo một brand có tên theo kiểu : ``` Ten-task-1 ``` sau khi làm xong commit và push lên github có thể mỗi lần commit github sẽ yêu cầu tạo pull request bạn bấm chọn ``` create pull request ``` sau khi push lên github xong sẽ commit và merge brand vào brand ``` master``` 
+
+## 10. Kết luận
 
 Shop-Meal áp dụng kiến trúc Microservices nhằm phân tách các nghiệp vụ thành những thành phần độc lập, dễ phát triển và bảo trì. Eureka hỗ trợ khám phá dịch vụ, API Gateway cung cấp điểm truy cập tập trung, các microservice xử lý nghiệp vụ và quản lý dữ liệu, còn React + TypeScript cung cấp giao diện tương tác cho người dùng.
 

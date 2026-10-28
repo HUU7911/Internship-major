@@ -2,6 +2,7 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
       <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
@@ -16,17 +17,18 @@
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.48/lombok-1.18.48.jar" />
         </processorPath>
         <module name="api-gateway" />
-        <module name="identity-service" />
+        <module name="notification-service" />
+        <module name="profile-service" />
       </profile>
-      <profile name="Annotation profile for notification-service" enabled="true">
+      <profile name="Annotation profile for identity-service" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.48/lombok-1.18.48.jar" />
-          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.48/lombok-1.18.48.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct-processor/1.6.3/mapstruct-processor-1.6.3.jar" />
         </processorPath>
-        <module name="notification-service" />
+        <module name="identity-service" />
       </profile>
     </annotationProcessing>
   </component>

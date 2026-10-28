@@ -55,3 +55,30 @@
     <version>${org.mapstruct.version}</version>
 </path>
 ```
+ 4. Dotenv
+
+```xml
+<dependency>
+    <groupId>io.github.cdimascio</groupId>
+    <artifactId>dotenv-java</artifactId>
+    <version>3.0.0</version>
+</dependency>
+```
+
+### Config
+
+```java
+@SpringBootApplication
+public class Application {
+    public static void main(String[] args) {
+        Dotenv dotenv = Dotenv.configure()
+                .ignoreIfMissing()
+                .load();
+
+        dotenv.entries().forEach(entry ->
+                System.setProperty(entry.getKey(), entry.getValue())
+        );
+        SpringApplication.run(Application.class, args);
+    }
+}
+```

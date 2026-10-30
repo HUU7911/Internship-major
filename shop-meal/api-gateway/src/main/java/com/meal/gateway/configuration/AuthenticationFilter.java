@@ -37,9 +37,21 @@ public class AuthenticationFilter implements GlobalFilter, Ordered {
     ObjectMapper objectMapper;
 
     private static final List<String> PUBLIC_ENDPOINTS = List.of(
+            "/identity/users/create",
             "/identity/auth/login",
-            "/identity/auth/create",
-            "/identity/auth/introspect"
+            "/identity/auth/introspect",
+            "/identity/auth/forgot-password",
+            "/identity/auth/reset-password",
+            "/identity/auth/verify-otp",
+            "/search/product",
+            "/product/food",
+            "/product/category",
+            "/identity/auth/outbound/identity",
+            "/file/media/download",
+            "/post/banner/getAll",
+            "/payment/paid/payos-webhook",
+            "/file/media/download/.*",
+            "/post/getAllPost"
     );
 
     @NonFinal

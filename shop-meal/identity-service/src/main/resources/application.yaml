@@ -8,7 +8,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     show-sql: true
     format-sql: false
     open-in-view: false
@@ -34,10 +34,6 @@ jwt:
   signer-key: ${SIGNER_KEY}
   valid-duration: ${VALID_DURATION}
   refreshable-duration: ${REFRESHABLE_DURATION}
-
-app:
-  config:
-    url: http://localhost:8081
 
 eureka:
   instance:

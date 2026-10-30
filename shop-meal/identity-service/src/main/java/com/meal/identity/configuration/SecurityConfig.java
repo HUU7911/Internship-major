@@ -1,5 +1,6 @@
 package com.meal.identity.configuration;
 
+import com.meal.identity.constant.RoleDefine;
 import lombok.experimental.NonFinal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -26,11 +27,17 @@ public class SecurityConfig {
             "/users/create"
     };
 
+    @NonFinal
+    private final String[] PRIVATE_MATCHERS = {
+            "/internal/users/registration"
+    };
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(authorizeRequests ->
                 authorizeRequests
                         .requestMatchers(PUBLIC_MATCHERS).permitAll()
+                        .requestMatchers(PRIVATE_MATCHERS).hasRole(RoleDefine.ADMIN.name())
                         .anyRequest().authenticated());
 
         http.csrf(AbstractHttpConfigurer::disable);

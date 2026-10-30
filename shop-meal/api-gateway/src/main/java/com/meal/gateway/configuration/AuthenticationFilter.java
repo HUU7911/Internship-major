@@ -95,7 +95,8 @@ public class AuthenticationFilter implements GlobalFilter, Ordered {
         response.setStatusCode(HttpStatus.UNAUTHORIZED);
         response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
 
-        byte[] bytes = body.getBytes(StandardCharsets.UTF_8);
-        return response.writeWith(Mono.just(response.bufferFactory().wrap(bytes)));
+        return response.writeWith(
+                Mono.just(response.bufferFactory()
+                        .wrap(body.getBytes(StandardCharsets.UTF_8))));
     }
 }

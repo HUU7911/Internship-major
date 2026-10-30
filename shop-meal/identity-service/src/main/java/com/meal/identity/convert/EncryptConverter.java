@@ -13,6 +13,7 @@ public class EncryptConverter implements AttributeConverter<String, String> {
         if (Objects.isNull(attribute)) {
             return null;
         }
+
         return Base64.getEncoder().encodeToString(attribute.getBytes());
     }
 
@@ -21,6 +22,7 @@ public class EncryptConverter implements AttributeConverter<String, String> {
         if (Objects.isNull(dbData)) {
             return null;
         }
+
         return new String(Base64.getDecoder().decode(dbData));
     }
 }

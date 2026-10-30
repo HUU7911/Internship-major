@@ -11,10 +11,10 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
-@Builder
-@Table(name = "users")
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
+@Table(name = "users")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class User {
 

@@ -1,6 +1,6 @@
 package com.meal.identity.dto.response;
 
-import com.meal.identity.entity.Role;
+import com.meal.identity.entity.Permission;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -14,5 +14,5 @@ import java.util.Set;
 public class RoleResponse {
     String name;
     String description;
-    Set<Role> permissions;
+    Set<Permission> permissions;
 }

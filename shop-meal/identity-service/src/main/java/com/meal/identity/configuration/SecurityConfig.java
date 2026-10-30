@@ -17,40 +17,50 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
-public class SecurityConfig {
-
-    @Autowired
-    private CustomJwtDecode customJwtDecode;
+public class SecurityConfig{
 
     @NonFinal
     private final String[] PUBLIC_MATCHERS = {
-            "/auth/login",
             "/users/create",
+            "/auth/login",
+            "/auth/logout",
             "/auth/introspect",
+            "/auth/outbound/identity"
+    };
+
+    @NonFinal
+    private final String[] PUBLIC_RESET_PASSWORD = {
+            "/auth/forgot-password",
+            "/auth/reset-password",
+            "/auth/verify-otp"
     };
 
     @NonFinal
     private final String[] PRIVATE_MATCHERS = {
-            "/internal/users/registration",
-            "/users"
+            "/users",
+            "/users/delete/{id}",
+            "/internal/users/create",
+            "/roles/update"
     };
 
+    @Autowired
+    private CustomJwtDecoder jwtDecoder;
+
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http) {
+
         http.authorizeHttpRequests(authorizeRequests ->
-                authorizeRequests
-                        .requestMatchers(HttpMethod.POST, PUBLIC_MATCHERS).permitAll()
+                authorizeRequests.requestMatchers(HttpMethod.POST, PUBLIC_MATCHERS).permitAll()
                         .requestMatchers(PRIVATE_MATCHERS).hasRole(RoleDefine.ADMIN.name())
+                        .requestMatchers(PUBLIC_RESET_PASSWORD).permitAll()
                         .anyRequest().authenticated());
 
-        http.csrf(AbstractHttpConfigurer::disable);
+        http.oauth2ResourceServer(oauth ->
+                oauth.jwt(jwtConfigurer -> jwtConfigurer.decoder(jwtDecoder)
+                                .jwtAuthenticationConverter(jwtAuthenticationConverter()))
+                        .authenticationEntryPoint(new JwtAuthenticationEntryPoint()));
 
-        http.oauth2ResourceServer(oauth2 ->
-                oauth2.jwt(jwtConfigurer ->
-                                jwtConfigurer.decoder(customJwtDecode)
-                                        .jwtAuthenticationConverter(jwtAuthenticationConverter()))
-                        .authenticationEntryPoint(new JwtAuthenticationEntrypoint())
-        );
+        http.csrf(AbstractHttpConfigurer::disable);
 
         return http.build();
     }
@@ -58,8 +68,9 @@ public class SecurityConfig {
     @Bean
     JwtAuthenticationConverter jwtAuthenticationConverter() {
         JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
+
         jwtGrantedAuthoritiesConverter.setAuthorityPrefix("");
-        jwtGrantedAuthoritiesConverter.setAuthoritiesClaimDelimiter("\\s*, \\s*");
+        jwtGrantedAuthoritiesConverter.setAuthoritiesClaimDelimiter("\\s*,\\s*");
 
         JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
         jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(jwtGrantedAuthoritiesConverter);

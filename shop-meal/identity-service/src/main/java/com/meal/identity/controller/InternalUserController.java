@@ -13,15 +13,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/internal")
 @RequiredArgsConstructor
+@RequestMapping("/internal/users")
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class InternalUserController {
 
     UserService userService;
 
-    @PostMapping("/users/registration")
-    ApiResponse<UserResponse> createStaff(@RequestBody UserCreationRequest request) {
+    @PostMapping("/create")
+    ApiResponse<UserResponse> createUser(@RequestBody UserCreationRequest request) throws Exception {
         return ApiResponse.<UserResponse>builder()
                 .results(userService.internalCreateUser(request))
                 .build();

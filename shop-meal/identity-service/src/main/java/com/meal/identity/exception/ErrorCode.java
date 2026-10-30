@@ -1,25 +1,32 @@
 package com.meal.identity.exception;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 
 @Getter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public enum ErrorCode {
 
-    UNAUTHENTICATED(1001, "Unauthenticated", HttpStatus.UNAUTHORIZED),
-    UNCATEGORIZED(9999, "Uncategorized", HttpStatus.INTERNAL_SERVER_ERROR),
+    UNCATEGORIZED(1001, "Uncategorized", HttpStatus.BAD_REQUEST),
     USER_NOT_FOUND(1002, "User not found", HttpStatus.NOT_FOUND),
-    USER_EXIST(1003, "User already exist", HttpStatus.CONFLICT),
-    USER_NOT_CREATED(1004, "User not created", HttpStatus.BAD_REQUEST),
-    INVALID_KEY(1005, "Invalid key", HttpStatus.BAD_REQUEST),
+    USER_NOT_EXIST(1003, "User not exist", HttpStatus.BAD_REQUEST),
+    USER_EXIST(1004, "User not exist", HttpStatus.BAD_REQUEST),
+    UNAUTHORIZED(1005, "Unauthorized", HttpStatus.UNAUTHORIZED),
+    UNAUTHENTICATED(1006, "Unauthenticated", HttpStatus.UNAUTHORIZED),
+    ACCESS_DENIED(1007, "Access denied", HttpStatus.FORBIDDEN),
+    INVALID_KEY(1008, "Invalid key", HttpStatus.BAD_REQUEST),
+    USER_NOT_CREATED(1009, "User not created", HttpStatus.BAD_REQUEST),
+    OTP_EXPIRED(10010, "OTP expired", HttpStatus.BAD_REQUEST),
+    INVALID_OTP(10011, "Invalid OTP", HttpStatus.BAD_REQUEST),
+    INVALID_RESET_TOKEN(10012, "Invalid reset token", HttpStatus.BAD_REQUEST),
+    TOO_MANY_ATTEMPTS(429, "Too many attempts", HttpStatus.BAD_GATEWAY),
     ;
 
-    private int code;
-    private String message;
-    private HttpStatusCode httpStatusCode;
+    int code;
+    String message;
+    HttpStatusCode httpStatusCode;
 }

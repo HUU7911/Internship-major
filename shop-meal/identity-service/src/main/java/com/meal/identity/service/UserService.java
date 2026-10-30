@@ -44,7 +44,7 @@ public class UserService {
 
     @Transactional
     public UserResponse createUser(UserCreationRequest request) {
-        if (userRepository.existsByEmail(request.getEmail())) {
+        if (userRepository.existsByUsername(request.getUsername())) {
             throw new AppException(ErrorCode.USER_EXIST);
         }
 

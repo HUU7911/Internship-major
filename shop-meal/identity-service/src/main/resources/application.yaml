@@ -12,18 +12,18 @@ spring:
     show-sql: true
     format-sql: false
     open-in-view: false
-#  data:
-#    redis:
-#      host: localhost
-#      port: 6379
+  data:
+    redis:
+      host: localhost
+      port: 6379
 
-#  kafka:
-#    bootstrap-servers: localhost:9092
-#    producer:
-#      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-#      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
-#    properties:
-#      spring.json.trusted.packages: "*"
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    properties:
+      spring.json.trusted.packages: "*"
 
 server:
   port: 8080
@@ -34,6 +34,10 @@ jwt:
   signer-key: ${SIGNER_KEY}
   valid-duration: ${VALID_DURATION}
   refreshable-duration: ${REFRESHABLE_DURATION}
+
+app:
+  config:
+    url: http://localhost:8081
 
 eureka:
   instance:
@@ -49,3 +53,9 @@ outbound:
     client-id: ${CLIENT_ID}
     client-secret: ${CLIENT_SECRET}
     redirect-uri: ${REDIRECT_URL}
+
+security:
+   login:
+   max-attempts: 5
+   window-minutes: 15
+   lock-minutes: 15

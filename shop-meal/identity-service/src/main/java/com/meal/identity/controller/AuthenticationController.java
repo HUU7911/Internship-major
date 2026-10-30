@@ -4,9 +4,9 @@ import com.meal.identity.dto.ApiResponse;
 import com.meal.identity.dto.request.*;
 import com.meal.identity.dto.response.AuthenticationResponse;
 import com.meal.identity.dto.response.IntrospectResponse;
-//import com.meal.identity.dto.response.ResetPasswordResponse;
+import com.meal.identity.dto.response.ResetPasswordResponse;
 import com.meal.identity.service.AuthenticationService;
-//import com.meal.identity.service.PasswordResetService;
+import com.meal.identity.service.PasswordResetService;
 import com.nimbusds.jose.JOSEException;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
@@ -23,7 +23,7 @@ import java.text.ParseException;
 public class AuthenticationController {
 
     AuthenticationService authenticationService;
-//    PasswordResetService passwordResetService;
+    PasswordResetService passwordResetService;
 
     @PostMapping("/login")
     ApiResponse<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
@@ -62,29 +62,29 @@ public class AuthenticationController {
                 .build();
     }
 
-//    @PostMapping("/forgot-password")
-//    public ApiResponse<Void> forgotPassword(@RequestBody @Valid ForgotPasswordRequest request) {
-//        passwordResetService.forgotPassword(request);
-//        return ApiResponse.<Void>builder()
-//                .message("If the email exists, an OTP has been sent")
-//                .build();
-//    }
-//
-//    @PostMapping("/verify-otp")
-//    public ApiResponse<ResetPasswordResponse> verifyOtp(@RequestBody @Valid VerifyOtpRequest request) {
-//        String resetToken = passwordResetService.verifyOtp(request);
-//        return ApiResponse.<ResetPasswordResponse>builder()
-//                .results(ResetPasswordResponse.builder()
-//                        .resetToken(resetToken)
-//                        .build())
-//                .build();
-//    }
-//
-//    @PostMapping("/reset-password")
-//    public ApiResponse<Void> resetPassword(@RequestBody @Valid ResetPasswordRequest request) {
-//        passwordResetService.resetPassword(request);
-//        return ApiResponse.<Void>builder()
-//                .message("Password reset successfully")
-//                .build();
-//    }
+    @PostMapping("/forgot-password")
+    public ApiResponse<Void> forgotPassword(@RequestBody @Valid ForgotPasswordRequest request) {
+        passwordResetService.forgotPassword(request);
+        return ApiResponse.<Void>builder()
+                .message("If the email exists, an OTP has been sent")
+                .build();
+    }
+
+    @PostMapping("/verify-otp")
+    public ApiResponse<ResetPasswordResponse> verifyOtp(@RequestBody @Valid VerifyOtpRequest request) {
+        String resetToken = passwordResetService.verifyOtp(request);
+        return ApiResponse.<ResetPasswordResponse>builder()
+                .results(ResetPasswordResponse.builder()
+                        .resetToken(resetToken)
+                        .build())
+                .build();
+    }
+
+    @PostMapping("/reset-password")
+    public ApiResponse<Void> resetPassword(@RequestBody @Valid ResetPasswordRequest request) {
+        passwordResetService.resetPassword(request);
+        return ApiResponse.<Void>builder()
+                .message("Password reset successfully")
+                .build();
+    }
 }

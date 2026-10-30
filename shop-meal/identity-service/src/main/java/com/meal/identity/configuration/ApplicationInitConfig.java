@@ -35,36 +35,36 @@ public class ApplicationInitConfig{
     @Bean
     ApplicationRunner applicationRunner(UserRepository userRepository, RoleRepository roleRepository) {
         return args -> {
-            if (userRepository.findByUsername(ADMIN_USERNAME).isEmpty()) {
-                roleRepository.save(Role.builder()
-                        .name(RoleDefine.USER.name())
-                        .description("has role user")
-                        .build()
-                );
+              if (userRepository.findByUsername(ADMIN_USERNAME).isEmpty()) {
+                  roleRepository.save(Role.builder()
+                          .name(RoleDefine.USER.name())
+                          .description("has role user")
+                          .build()
+                  );
 
-                var roleAdmin = roleRepository.save(Role.builder()
-                        .name(RoleDefine.ADMIN.name())
-                        .description("has role admin")
-                        .build()
-                );
+                  var roleAdmin = roleRepository.save(Role.builder()
+                          .name(RoleDefine.ADMIN.name())
+                          .description("has role admin")
+                          .build()
+                  );
 
-                var roles = new HashSet<Role>();
-                roles.add(roleAdmin);
+                  var roles = new HashSet<Role>();
+                  roles.add(roleAdmin);
 
-                User user = User.builder()
-                        .username(ADMIN_USERNAME)
-                        .password(passwordEncoder.encode(ADMIN_PASSWORD))
-                        .firstName("tran")
-                        .lastName("huu")
-                        .email("trihuutran4@gmail.com")
-                        .birthday(LocalDate.of(2006, 4, 5))
-                        .roles(roles)
-                        .build();
+                  User user = User.builder()
+                          .username(ADMIN_USERNAME)
+                          .password(passwordEncoder.encode(ADMIN_PASSWORD))
+                          .firstName("tran")
+                          .lastName("huu")
+                          .email("trihuutran4@gmail.com")
+                          .birthday(LocalDate.of(2006, 4, 5))
+                          .roles(roles)
+                          .build();
 
-                userRepository.save(user);
-                log.info("Role initial by name: {}", roleAdmin.getName());
-            }
-            log.info("Role has been created");
+                  userRepository.save(user);
+                  log.info("Role initial by name: {}", roleAdmin.getName());
+              }
+              log.info("Role has been created");
         };
     }
 }

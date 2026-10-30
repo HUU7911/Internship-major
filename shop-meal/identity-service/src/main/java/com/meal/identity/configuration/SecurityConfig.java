@@ -5,6 +5,7 @@ import lombok.experimental.NonFinal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -24,27 +25,30 @@ public class SecurityConfig {
     @NonFinal
     private final String[] PUBLIC_MATCHERS = {
             "/auth/login",
-            "/users/create"
+            "/users/create",
+            "/auth/introspect",
     };
 
     @NonFinal
     private final String[] PRIVATE_MATCHERS = {
-            "/internal/users/registration"
+            "/internal/users/registration",
+            "/users"
     };
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(authorizeRequests ->
                 authorizeRequests
-                        .requestMatchers(PUBLIC_MATCHERS).permitAll()
+                        .requestMatchers(HttpMethod.POST, PUBLIC_MATCHERS).permitAll()
                         .requestMatchers(PRIVATE_MATCHERS).hasRole(RoleDefine.ADMIN.name())
                         .anyRequest().authenticated());
 
         http.csrf(AbstractHttpConfigurer::disable);
 
         http.oauth2ResourceServer(oauth2 ->
-                oauth2.jwt(jwtConfigurer -> jwtConfigurer.decoder(customJwtDecode)
-                                .jwtAuthenticationConverter(jwtAuthenticationConverter()))
+                oauth2.jwt(jwtConfigurer ->
+                                jwtConfigurer.decoder(customJwtDecode)
+                                        .jwtAuthenticationConverter(jwtAuthenticationConverter()))
                         .authenticationEntryPoint(new JwtAuthenticationEntrypoint())
         );
 

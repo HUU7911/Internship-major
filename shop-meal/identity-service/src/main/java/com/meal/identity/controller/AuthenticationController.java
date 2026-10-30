@@ -26,7 +26,7 @@ public class AuthenticationController {
 //    PasswordResetService passwordResetService;
 
     @PostMapping("/login")
-    ApiResponse<AuthenticationResponse> authenticate(@RequestBody @Valid AuthenticationRequest request) {
+    ApiResponse<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
         return ApiResponse.<AuthenticationResponse>builder()
                 .results(authenticationService.authenticate(request))
                 .build();

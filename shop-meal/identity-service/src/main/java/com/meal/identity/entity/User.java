@@ -38,6 +38,6 @@ public class User {
 
     LocalDate birthday;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     Set<Role> roles;
 }

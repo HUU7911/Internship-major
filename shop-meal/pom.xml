@@ -11,9 +11,11 @@
 
     <modules>
         <module>api-gateway</module>
+        <module>cart-service</module>
         <module>discovery-service</module>
         <module>identity-service</module>
         <module>profile-service</module>
         <module>notification-service</module>
+        <module>post-service</module>
     </modules>
 </project>

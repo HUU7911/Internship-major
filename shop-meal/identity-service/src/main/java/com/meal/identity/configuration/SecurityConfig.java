@@ -48,7 +48,7 @@ public class SecurityConfig {
     JwtAuthenticationConverter jwtAuthenticationConverter() {
         JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
         jwtGrantedAuthoritiesConverter.setAuthorityPrefix("");
-        jwtGrantedAuthoritiesConverter.setAuthoritiesClaimDelimiter("s*\\, s*\\");
+        jwtGrantedAuthoritiesConverter.setAuthoritiesClaimDelimiter("\\s*, \\s*");
 
         JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
         jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(jwtGrantedAuthoritiesConverter);

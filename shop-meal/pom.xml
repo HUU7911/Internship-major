@@ -17,5 +17,6 @@
         <module>profile-service</module>
         <module>notification-service</module>
         <module>post-service</module>
+        <module>file-service</module>
     </modules>
 </project>

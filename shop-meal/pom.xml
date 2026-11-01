@@ -18,5 +18,6 @@
         <module>notification-service</module>
         <module>post-service</module>
         <module>file-service</module>
+        <module>product-service</module>
     </modules>
 </project>

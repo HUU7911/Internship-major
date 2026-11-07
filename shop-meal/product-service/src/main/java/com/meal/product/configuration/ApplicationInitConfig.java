@@ -16,7 +16,7 @@ import java.util.Locale;
 public class ApplicationInitConfig {
 
     @NonFinal
-    private String[] categories = {
+    private final String[] categories = {
             "CAFE",
             "NOODLE",
             "RICE",

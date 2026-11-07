@@ -91,10 +91,6 @@ export const productApi = {
     unwrap<Category>(api.post('/product/category/create', body)).finally(invalidateCategories),
   deleteCategory: (name: string) =>
     api.delete(`/product/category/delete/${encodeURIComponent(name)}`).finally(invalidateCategories),
-  /**
-   * Gửi multipart gồm 2 phần: `food` (JSON) và `file` (ảnh).
-   * Backend cần nhận bằng @RequestPart("food") FoodRequest + @RequestPart("file") MultipartFile.
-   */
   createFood: (
     food: FoodPayload,
     file: File,

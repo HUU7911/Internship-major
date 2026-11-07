@@ -1,0 +1,53 @@
+spring:
+  application:
+    name: search-service
+  data:
+    redis:
+      host: localhost
+      port: 6379
+  cache:
+    type: redis
+    redis:
+      time-to-live: 10m
+      cache-null-values: false
+  ssl:
+    bundle:
+      pem:
+        elastic:
+          truststore:
+            certificate: ${SSL}
+  elasticsearch:
+    uris: https://localhost:9200
+    username: elastic
+    password: ${PASSWORD}
+    restclient:
+      ssl:
+        bundle: elastic
+    data:
+      elasticsearch:
+        repositories:
+          enabled: true
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: search-service
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+
+      properties:
+        spring.json.trusted.packages: "*"
+
+server:
+  port: 8084
+  servlet:
+    context-path: /search
+
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: ${EUREKA}

@@ -19,5 +19,6 @@
         <module>post-service</module>
         <module>file-service</module>
         <module>product-service</module>
+        <module>order-service</module>
     </modules>
 </project>

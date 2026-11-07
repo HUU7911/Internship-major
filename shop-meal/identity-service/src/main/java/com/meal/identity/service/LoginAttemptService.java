@@ -35,19 +35,17 @@ public class LoginAttemptService {
     @Value("${security.login.lock-minutes:15}")
     long lockMinutes;
 
-    /** Số giây còn bị khóa; 0 nếu tài khoản không bị khóa. */
     public long getLockRemainingSeconds(String username) {
         Long ttl = redis.getExpire(LOCK_PREFIX + normalize(username));
         return (ttl != null && ttl > 0) ? ttl : 0;
     }
 
-    /** Gọi mỗi khi đăng nhập thất bại (kể cả khi username không tồn tại). */
     public void recordFailure(String username) {
         String key = normalize(username);
         String failKey = FAIL_PREFIX + key;
 
         Long count = redis.opsForValue().increment(failKey);
-        redis.expire(failKey, Duration.ofMinutes(windowMinutes)); // luôn đặt lại TTL, key không tồn tại vô hạn
+        redis.expire(failKey, Duration.ofMinutes(windowMinutes));
 
         if (count != null && count >= maxAttempts) {
             redis.opsForValue().set(LOCK_PREFIX + key, "1", Duration.ofMinutes(lockMinutes));
@@ -56,7 +54,6 @@ public class LoginAttemptService {
         }
     }
 
-    /** Gọi khi đăng nhập thành công. */
     public void recordSuccess(String username) {
         redis.delete(FAIL_PREFIX + normalize(username));
     }

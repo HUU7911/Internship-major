@@ -1,0 +1,39 @@
+package com.meal.payment.controller;
+
+import com.meal.payment.dto.ApiResponse;
+import com.meal.payment.dto.request.CreatePaymentRequest;
+import com.meal.payment.dto.response.PaymentResponse;
+import com.meal.payment.service.PaymentService;
+import jakarta.validation.Valid;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import org.springframework.web.bind.annotation.*;
+import vn.payos.model.webhooks.Webhook;
+
+import java.util.Map;
+
+@RestController
+@RequestMapping("/paid")
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+public class PaymentController {
+
+    PaymentService paymentService;
+
+    @PostMapping("/create")
+    public ApiResponse<PaymentResponse> createPayment(@Valid @RequestBody CreatePaymentRequest request) {
+
+        return ApiResponse.<PaymentResponse>builder()
+                .results(paymentService.createPayment(request))
+                .build();
+    }
+
+    @PostMapping("/payos-webhook")
+    public ApiResponse<Map<String, Object>> handleWebhook(@RequestBody Webhook body) {
+        paymentService.handleWebhook(body);
+        return ApiResponse.<Map<String, Object>>builder()
+                .results(Map.of("success", true))
+                .build();
+    }
+}

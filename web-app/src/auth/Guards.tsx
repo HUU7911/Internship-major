@@ -8,6 +8,7 @@ export function RequireAuth() {
   return <Outlet />;
 }
 
+/** Khu vực chỉ ADMIN (identity-service: GET /users và POST /internal/users/create yêu cầu ROLE_ADMIN). */
 export function RequireAdmin() {
   const { isAuthenticated, isAdmin } = useAuth();
   const location = useLocation();

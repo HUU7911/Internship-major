@@ -13,5 +13,17 @@
     <file url="file://$PROJECT_DIR$/shop-meal/product-service/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/shop-meal/profile-service/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/shop-meal/search-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/task-1/api-gateway/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/task-1/identity-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/task-1/profile-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/task-2/discovery-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/task-2/notification-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/task-2/post-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/task-3/file-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/task-3/product-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/task-4/cart-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/task-4/order-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/task-5/payment-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/task-5/search-service/src/main/java" charset="UTF-8" />
   </component>
 </project>

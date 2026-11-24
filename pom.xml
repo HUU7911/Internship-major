@@ -1,0 +1,24 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.meal</groupId>
+    <artifactId>shop-meal</artifactId>
+    <version>1.0.0</version>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>task-1/api-gateway</module>
+        <module>task-1/identity-service</module>
+        <module>task-1/profile-service</module>
+        <module>task-2/notification-service</module>
+        <module>task-2/discovery-service</module>
+        <module>task-2/post-service</module>
+        <module>task-3/product-service</module>
+        <module>task-3/file-service</module>
+        <module>task-4/cart-service</module>
+        <module>task-4/order-service</module>
+        <module>task-5/payment-service</module>
+        <module>task-5/search-service</module>
+    </modules>
+</project>

@@ -1,7 +1,7 @@
 package com.meal.search.kafka;
 
-import com.meal.even.dto.CategoryEvent;
-import com.meal.even.dto.ProductEvent;
+import com.meal.contract.event.CategoryEvent;
+import com.meal.contract.event.ProductEvent;
 import com.meal.search.document.CategoryDocument;
 import com.meal.search.document.ProductDocument;
 import com.meal.search.repository.ProductSearchRepository;
@@ -56,7 +56,7 @@ public class KafkaConsumer {
                 .price(event.getPrice())
                 .images(event.getImages())
                 .type(event.getType())
-                .categories(toCategoryDocuments(event.getCategories()))
+                .categories(toCategoryDocuments(event.getCategories().stream().toList()))
                 .build();
     }
 

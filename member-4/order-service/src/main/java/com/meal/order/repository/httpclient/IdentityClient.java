@@ -1,6 +1,6 @@
 package com.meal.order.repository.httpclient;
 
-import com.meal.order.dto.ApiResponse;
+import com.meal.contract.common.ApiResponse;
 import com.meal.order.dto.client.IntrospectRequest;
 import com.meal.order.dto.client.IntrospectResponse;
 import org.springframework.cloud.openfeign.FeignClient;

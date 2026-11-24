@@ -1,6 +1,6 @@
 package com.meal.gateway.repository;
 
-import com.meal.gateway.dto.ApiResponse;
+import com.meal.contract.common.ApiResponse;
 import com.meal.gateway.dto.request.IntrospectResponse;
 import com.meal.gateway.dto.response.IntrospectRequest;
 import org.springframework.http.MediaType;

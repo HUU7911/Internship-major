@@ -1,6 +1,6 @@
 package com.meal.identity.mapper;
 
-import com.meal.identity.dto.request.ProfileCreationRequest;
+import com.meal.contract.dto.ProfileCreationRequest;
 import com.meal.identity.dto.request.UserCreationRequest;
 import org.mapstruct.Mapper;
 

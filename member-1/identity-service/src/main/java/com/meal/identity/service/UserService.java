@@ -1,7 +1,7 @@
 package com.meal.identity.service;
 
-import com.meal.event.dto.NotificationEvent;
-import com.meal.identity.constant.RoleDefine;
+import com.meal.contract.event.NotificationEvent;
+import com.meal.contract.constant.RoleDefine;
 import com.meal.identity.dto.request.UserCreationRequest;
 import com.meal.identity.dto.request.UserUpdateRequest;
 import com.meal.identity.dto.response.UserResponse;

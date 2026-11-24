@@ -1,6 +1,6 @@
 package com.meal.search.document;
 
-import com.meal.search.constants.Type;
+import com.meal.contract.constant.Type;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.annotation.Id;
@@ -8,6 +8,7 @@ import org.springframework.data.elasticsearch.annotations.*;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Builder

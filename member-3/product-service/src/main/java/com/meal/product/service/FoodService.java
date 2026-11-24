@@ -1,6 +1,6 @@
 package com.meal.product.service;
 
-import com.meal.even.dto.ProductEvent;
+import com.meal.contract.event.ProductEvent;
 import com.meal.product.dto.PageResponse;
 import com.meal.product.dto.request.FoodRequest;
 import com.meal.product.dto.request.FoodUpdateRequest;

@@ -1,6 +1,6 @@
 package com.meal.post.service;
 
-import com.meal.post.dto.PageResponse;
+import com.meal.contract.common.PageResponse;
 import com.meal.post.dto.request.PostRequest;
 import com.meal.post.dto.request.PostUpdateRequest;
 import com.meal.post.dto.response.FoodInfoResponse;
@@ -34,7 +34,6 @@ import java.io.IOException;
 import java.time.Instant;
 import java.util.List;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)

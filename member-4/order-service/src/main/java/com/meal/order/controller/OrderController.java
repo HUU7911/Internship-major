@@ -2,7 +2,7 @@ package com.meal.order.controller;
 
 import com.meal.contract.common.ApiResponse;
 import com.meal.contract.common.PageResponse;
-import com.meal.order.dto.client.FoodOrderRequest;
+import com.meal.contract.dto.FoodOrderRequest;
 import com.meal.order.dto.request.CreateOrderRequest;
 import com.meal.order.dto.response.OrderResponse;
 import com.meal.order.service.OrderService;

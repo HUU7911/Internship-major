@@ -41,7 +41,7 @@ public class FileRepository {
             minioClient.putObject(PutObjectArgs.builder()
                     .bucket(bucket)
                     .object(objectKey)
-                    .stream(stream, file.getSize(), -1)
+                    .stream(stream, file.getSize(), (long) -1)
                     .contentType(contentType)
                     .build()
             );

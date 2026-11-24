@@ -7,9 +7,9 @@ import com.meal.product.dto.request.FoodUpdateRequest;
 import com.meal.product.dto.response.FoodInfoResponse;
 import com.meal.product.dto.response.FoodResponse;
 import com.meal.product.dto.response.FoodSnapshotResponse;
-import com.meal.product.entity.Category;
 import com.meal.product.exception.AppException;
 import com.meal.product.exception.ErrorCode;
+import com.meal.product.mapper.FoodEventMapper;
 import com.meal.product.mapper.FoodMapper;
 import com.meal.product.repository.CategoryRepository;
 import com.meal.product.repository.FoodRepository;
@@ -41,17 +41,19 @@ public class FoodService {
     FoodRepository foodRepository;
     FileClient fileClient;
     PostClient postClient;
+    FoodEventMapper foodEventMapper;
     KafkaTemplate<String, ProductEvent> kafkaTemplate;
 
     public FoodResponse createFood(FoodRequest request, MultipartFile file) {
-        if (foodRepository.existsByName(request.name())){
+        if (foodRepository.existsByName(request.name())) {
             throw new AppException(ErrorCode.PRODUCT_EXIST);
         }
 
         var food = foodMapper.toFood(request);
-        HashSet<Category> categories = new HashSet<>(
-                categoryRepository.findAllById(request.categories()));
-        food.setCategories(categories);
+
+        var categories = categoryRepository.findAllById(request.categories());
+        food.setCategories(new HashSet<>(categories));
+
         food.setCreatedDate(Instant.now());
 
         var response = fileClient.upload(file);
@@ -59,20 +61,7 @@ public class FoodService {
 
         food = foodRepository.save(food);
 
-        ProductEvent productEvent = ProductEvent.builder()
-                .eventType("CREATED")
-                .id(food.getId())
-                .name(food.getName())
-                .size(food.getSize())
-                .price(food.getPrice())
-                .type(food.getType())
-                .timeWork(food.getTimeWork())
-                .description(food.getDescription())
-                .images(food.getImages())
-                .position(food.getPosition())
-                .categories(food.getCategories())
-                .build();
-
+        var productEvent = foodEventMapper.toProductEvent(food, "CREATED");
         publishProductEvent(productEvent);
 
         return foodMapper.toFoodResponse(food);
@@ -88,22 +77,12 @@ public class FoodService {
         var response = fileClient.upload(file);
         food.setImages(List.of(response.getResults().getUrl()));
 
+        var categories = categoryRepository.findAllById(request.categories());
+        food.setCategories(new HashSet<>(categories));
+
         food = foodRepository.save(food);
 
-        ProductEvent productEvent = ProductEvent.builder()
-                .eventType("UPDATE_PRODUCT")
-                .id(food.getId())
-                .name(food.getName())
-                .size(food.getSize())
-                .price(food.getPrice())
-                .timeWork(food.getTimeWork())
-                .description(food.getDescription())
-                .images(food.getImages())
-                .position(food.getPosition())
-                .type(food.getType())
-                .categories(food.getCategories())
-                .build();
-
+        var productEvent = foodEventMapper.toProductEvent(food, "UPDATED");
         publishProductEvent(productEvent);
 
         return foodMapper.toFoodResponse(food);
@@ -178,7 +157,6 @@ public class FoodService {
             kafkaTemplate.send("product-event", productEvent);
             log.info("publish product event success: {}", productEvent);
         }catch (Exception e){
-            e.printStackTrace();
             log.error("publish product event error: {}", productEvent);
         }
     }

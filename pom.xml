@@ -8,6 +8,7 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>member-1/contract-service</module>
         <module>member-1/api-gateway</module>
         <module>member-1/identity-service</module>
         <module>member-1/profile-service</module>

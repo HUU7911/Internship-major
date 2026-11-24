@@ -2,6 +2,7 @@
 <project version="4">
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/member-1/api-gateway/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/member-1/contract-service/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/member-1/identity-service/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/member-1/profile-service/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/member-2/discovery-service/src/main/java" charset="UTF-8" />

@@ -1,12 +1,22 @@
-app:
-  api-prefix: /api/v1
-
 server:
   port: 8888
+
+app:
+  api-prefix: /api/v1
+  pre-auth:
+    limit: 600
+    window-seconds: 60
+    blocked-paths: /notification/email/send
+    skip-paths: /file/media/download
 
 spring:
   application:
     name: api-gateway
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
   cloud:
     gateway:
       server:
@@ -18,6 +28,42 @@ spring:
                 - Path=${app.api-prefix}/identity/**
               filters:
                 - StripPrefix=2
+                - name: RequestRateLimiter
+                  args:
+                    key-resolver: "#{@ipKeyResolver}"
+                    redis-rate-limiter.replenishRate: 5
+                    redis-rate-limiter.burstCapacity: 10
+                    redis-rate-limiter.requestedTokens: 1
+
+            - id: identity-login
+              order: -10
+              uri: lb://identity-service
+              predicates:
+                - Path=${app.api-prefix}/identity/auth/login
+                - Method=POST
+              filters:
+                - StripPrefix=2
+                - name: RequestRateLimiter
+                  args:
+                    key-resolver: "#{@ipKeyResolver}"
+                    redis-rate-limiter.replenishRate: 1
+                    redis-rate-limiter.burstCapacity: 60
+                    redis-rate-limiter.requestedTokens: 3
+
+            - id: identity-sensitive
+              order: -9
+              uri: lb://identity-service
+              predicates:
+                - Path=${app.api-prefix}/identity/auth/verify-otp,${app.api-prefix}/identity/auth/forgot-password,${app.api-prefix}/identity/auth/reset-password,${app.api-prefix}/identity/users/create
+                - Method=POST
+              filters:
+                - StripPrefix=2
+                - name: RequestRateLimiter
+                  args:
+                    key-resolver: "#{@ipKeyResolver}"
+                    redis-rate-limiter.replenishRate: 1
+                    redis-rate-limiter.burstCapacity: 60
+                    redis-rate-limiter.requestedTokens: 12
 
             - id: profile-service
               uri: lb://profile-service
@@ -32,6 +78,56 @@ spring:
                 - Path=${app.api-prefix}/notification/**
               filters:
                 - StripPrefix=2
+
+            - id: product-service
+              uri: lb://product-service
+              predicates:
+                - Path=${app.api-prefix}/product/**
+              filters:
+                - StripPrefix=2
+
+            - id: search-service
+              uri: lb://search-service
+              predicates:
+                - Path=${app.api-prefix}/search/**
+              filters:
+                - StripPrefix=2
+
+            - id: cart-service
+              uri: lb://cart-service
+              predicates:
+                - Path=${app.api-prefix}/cart/**
+              filters:
+                - StripPrefix=2
+
+            - id: order-service
+              uri: lb://order-service
+              predicates:
+                - Path=${app.api-prefix}/order/**
+              filters:
+                - StripPrefix=2
+
+            - id: payment-service
+              uri: lb://payment-service
+              predicates:
+                - Path=${app.api-prefix}/payment/**
+              filters:
+                - StripPrefix=2
+
+            - id: file-service
+              uri: lb://file-service
+              predicates:
+                - Path=${app.api-prefix}/file/**
+              filters:
+                - StripPrefix=2
+
+            - id: post-service
+              uri: lb://post-service
+              predicates:
+                - Path=${app.api-prefix}/post/**
+              filters:
+                - StripPrefix=2
+
 eureka:
   client:
     service-url:

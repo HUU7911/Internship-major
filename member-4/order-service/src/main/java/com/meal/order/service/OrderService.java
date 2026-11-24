@@ -2,12 +2,12 @@ package com.meal.order.service;
 
 import com.meal.contract.common.ApiResponse;
 import com.meal.contract.common.PageResponse;
+import com.meal.contract.dto.*;
 import com.meal.contract.event.OrderCreatedEvent;
 import com.meal.contract.event.OrderStatusChangedEvent;
 import com.meal.contract.constant.OrderStatus;
 import com.meal.contract.constant.PaymentMethod;
 import com.meal.contract.constant.PaymentStatus;
-import com.meal.order.dto.client.*;
 import com.meal.order.dto.request.CreateOrderRequest;
 import com.meal.order.dto.response.OrderItemResponse;
 import com.meal.order.dto.response.OrderResponse;
@@ -291,8 +291,8 @@ public class OrderService {
             ApiResponse<ProfileResponse> response = profileClient.getMyProfile();
             ProfileResponse profile = Objects.isNull(response) ? null : response.getResults();
 
-            if (!Objects.isNull(profile) && StringUtils.hasText(profile.email())) {
-                notificationPublisher.publishOrderCreated(order, profile.email());
+            if (!Objects.isNull(profile) && StringUtils.hasText(profile.getEmail())) {
+                notificationPublisher.publishOrderCreated(order, profile.getEmail());
             }
         } catch (Exception e) {
             log.warn("Could not send order notification: {}", e.getMessage());

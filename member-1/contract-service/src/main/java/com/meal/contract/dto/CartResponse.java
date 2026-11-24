@@ -1,4 +1,4 @@
-package com.meal.order.dto.client;
+package com.meal.contract.dto;
 
 import java.math.BigDecimal;
 import java.util.Set;

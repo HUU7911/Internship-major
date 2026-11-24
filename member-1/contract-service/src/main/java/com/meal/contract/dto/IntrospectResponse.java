@@ -1,4 +1,4 @@
-package com.meal.order.dto.client;
+package com.meal.contract.dto;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;

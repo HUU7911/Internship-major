@@ -1,8 +1,8 @@
 package com.meal.gateway.repository;
 
 import com.meal.contract.common.ApiResponse;
-import com.meal.gateway.dto.request.IntrospectResponse;
-import com.meal.gateway.dto.response.IntrospectRequest;
+import com.meal.contract.dto.IntrospectRequest;
+import com.meal.contract.dto.IntrospectResponse;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.service.annotation.PostExchange;

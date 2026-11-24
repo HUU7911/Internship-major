@@ -1,0 +1,27 @@
+# Version control / IDE
+.git
+.gitignore
+.idea
+.vscode
+
+# Java / Maven outputs
+**/target
+**/.mvn/wrapper/maven-wrapper.jar
+
+# Node
+**/node_modules
+**/dist
+**/coverage
+
+# Runtime / local data
+**/upload
+**/uploads
+**/logs
+*.log
+
+# Local environment and OS files
+.env
+.env.*
+!.env.docker.example
+.DS_Store
+Thumbs.db

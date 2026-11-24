@@ -8,7 +8,6 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.Locale;
 
 @Slf4j
@@ -25,8 +24,8 @@ public class ApplicationInitConfig {
 
     @Bean
     ApplicationRunner applicationRunner(CategoryRepository categoryRepository) {
-        return args -> {
-            if (categoryRepository.findAllById(List.of(categories)).isEmpty()) {
+        return _ -> {
+            if (categoryRepository.count() == 0) {
                 for (String category : categories) {
                     Category categories = Category.builder()
                             .name(category)

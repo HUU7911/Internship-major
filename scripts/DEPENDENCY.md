@@ -82,3 +82,12 @@ public class Application {
     }
 }
 ```
+
+ 5. MinIO
+```xml
+<dependency>
+    <groupId>io.minio</groupId>
+    <artifactId>minio</artifactId>
+    <version>9.0.3</version>
+</dependency>
+```

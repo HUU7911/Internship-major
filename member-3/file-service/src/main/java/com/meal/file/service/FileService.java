@@ -14,7 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
+import java.io.InputStream;
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +25,7 @@ public class FileService {
     FileMgmtRepository fileMgmtRepository;
     FileMgmtMapper fileMgmtMapper;
 
-    public FileResponse save (MultipartFile file) throws IOException {
+    public FileResponse uploadFile(MultipartFile file) throws Exception {
         var fileInfo = fileRepository.store(file);
 
         var fileMgmt = fileMgmtMapper.toFileMgmt(fileInfo);
@@ -40,12 +40,11 @@ public class FileService {
                 .build();
     }
 
-    public FileData download(String fileName) throws IOException {
-        var fileMgmt = fileMgmtRepository.findById(fileName).orElseThrow(
-                () -> new AppException(ErrorCode.UNAUTHORIZED)
-        );
+    public FileData download(String fileId) throws Exception {
+        var fileMgmt = fileMgmtRepository.findById(fileId)
+                .orElseThrow(() -> new AppException(ErrorCode.FILE_NOT_FOUND));
 
-        var resource = fileRepository.read(fileMgmt);
+        InputStream resource = fileRepository.read(fileMgmt.getPath());
 
         return new FileData(fileMgmt.getContentType(), resource);
     }

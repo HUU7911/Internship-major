@@ -1,57 +1,67 @@
 package com.meal.file.repository;
 
 import com.meal.file.dto.FileInfor;
-import com.meal.file.entity.FileMgmt;
+import io.minio.GetObjectArgs;
+import io.minio.MinioClient;
+import io.minio.PutObjectArgs;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ByteArrayResource;
-import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.DigestUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.util.Objects;
+import java.io.InputStream;
 import java.util.UUID;
 
 @Repository
+@RequiredArgsConstructor
 public class FileRepository {
+    private final MinioClient minioClient;
 
-    @Value("${app.localDir}")
-    private String localDir;
+    @Value("${minio.config.bucket}")
+    private String bucket;
 
-    @Value("${app.download}")
-    private String download;
+    @Value("${app.file.download-prefix}")
+    private String urlPrefix;
 
-    public FileInfor store(MultipartFile file) throws IOException {
-        Path folder = Paths.get(localDir);
+    public FileInfor store(MultipartFile file) throws Exception {
 
-        String fileExtension = StringUtils.getFilenameExtension(file.getOriginalFilename());
+        String extension = StringUtils.getFilenameExtension(file.getOriginalFilename());
+        String fileName = UUID.randomUUID() + (extension == null ? "" : "." + extension);
+        String objectKey = "products/" + fileName;
+        String contentType = file.getContentType();
+        String md5Checksum;
 
-        String fileName = Objects.isNull(fileExtension)
-                ? UUID.randomUUID().toString()
-                : UUID.randomUUID() + "." + fileExtension;
+        try (InputStream stream = file.getInputStream()) {
+            md5Checksum = DigestUtils.md5DigestAsHex(stream);
+        }
 
-        Path filePath = folder.resolve(fileName).normalize().toAbsolutePath();
-
-        Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+        try (InputStream stream = file.getInputStream()) {
+            minioClient.putObject(PutObjectArgs.builder()
+                    .bucket(bucket)
+                    .object(objectKey)
+                    .stream(stream, file.getSize(), -1)
+                    .contentType(contentType)
+                    .build()
+            );
+        }
 
         return FileInfor.builder()
                 .name(fileName)
                 .size(file.getSize())
-                .contentType(file.getContentType())
-                .md5Checksum(DigestUtils.md5DigestAsHex(file.getInputStream()))
-                .path(filePath.toString())
-                .url(download + fileName)
+                .contentType(contentType)
+                .md5Checksum(md5Checksum)
+                .path(objectKey)
+                .url(urlPrefix + fileName)
                 .build();
     }
 
-    public Resource read(FileMgmt fileMgmt) throws IOException {
-        var data = Files.readAllBytes(Path.of(fileMgmt.getPath()));
-        return new ByteArrayResource(data);
+    public InputStream read(String objectKey) throws Exception {
+        return minioClient.getObject(GetObjectArgs.builder()
+                .bucket(bucket)
+                .object(objectKey)
+                .build()
+        );
     }
 }

@@ -8,17 +8,17 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>task-1/api-gateway</module>
-        <module>task-1/identity-service</module>
-        <module>task-1/profile-service</module>
-        <module>task-2/notification-service</module>
-        <module>task-2/discovery-service</module>
-        <module>task-2/post-service</module>
-        <module>task-3/product-service</module>
-        <module>task-3/file-service</module>
-        <module>task-4/cart-service</module>
-        <module>task-4/order-service</module>
-        <module>task-5/payment-service</module>
-        <module>task-5/search-service</module>
+        <module>member-1/api-gateway</module>
+        <module>member-1/identity-service</module>
+        <module>member-1/profile-service</module>
+        <module>member-2/notification-service</module>
+        <module>member-2/discovery-service</module>
+        <module>member-2/post-service</module>
+        <module>member-3/product-service</module>
+        <module>member-3/file-service</module>
+        <module>member-4/cart-service</module>
+        <module>member-4/order-service</module>
+        <module>member-5/payment-service</module>
+        <module>member-5/search-service</module>
     </modules>
 </project>

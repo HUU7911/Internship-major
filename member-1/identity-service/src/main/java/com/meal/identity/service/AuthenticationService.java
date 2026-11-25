@@ -76,7 +76,7 @@ public class AuthenticationService {
         boolean isValid = true;
 
         try {
-            verifyToken(token, true);
+            verifyToken(token, false);
         }catch (Exception e) {
             isValid = false;
         }

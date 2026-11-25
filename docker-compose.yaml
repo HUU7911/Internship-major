@@ -179,7 +179,6 @@ services:
       CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
       CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-}
       REDIRECT_URL: ${GOOGLE_REDIRECT_URL:-http://localhost:3000/authenticate}
-      APP_CONFIG_URL: http://profile-service:8081
     depends_on:
       mysql:
         condition: service_healthy
@@ -203,7 +202,6 @@ services:
     environment:
       <<: *backend-environment
       PROFILE_URL: jdbc:mysql://mysql:3306/profile_db?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
-      APP_CONFIG_URL: http://file-service:8088
     depends_on:
       mysql:
         condition: service_healthy
@@ -246,9 +244,6 @@ services:
     environment:
       <<: *backend-environment
       POST_DB: mongodb://${MONGO_ROOT_USERNAME:-root}:${MONGO_ROOT_PASSWORD:-123456}@mongodb:27017/post_db?authSource=admin
-      APP_CONFIG_FILE_URL: http://file-service:8088
-      APP_CONFIG_PROFILE_URL: http://profile-service:8081
-      APP_CONFIG_PRODUCT_URL: http://product-service:8083
     depends_on:
       mongodb:
         condition: service_healthy
@@ -343,7 +338,6 @@ services:
     environment:
       <<: *backend-environment
       CART_URL: jdbc:mysql://mysql:3306/cart_db?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
-      APP_URL: http://product-service:8083
     depends_on:
       mysql:
         condition: service_healthy
@@ -365,10 +359,6 @@ services:
     environment:
       <<: *backend-environment
       ORDER_URL: jdbc:mysql://mysql:3306/order_db?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
-      APP_SERVICES_CART_URL: http://cart-service:8085
-      APP_SERVICES_PRODUCT_URL: http://product-service:8083
-      APP_SERVICES_PROFILE_URL: http://profile-service:8081
-      APP_SERVICES_PAYMENT_URL: http://payment-service:8087
     depends_on:
       mysql:
         condition: service_healthy

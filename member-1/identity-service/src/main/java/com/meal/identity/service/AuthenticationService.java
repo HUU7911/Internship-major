@@ -30,7 +30,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
+import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -61,6 +63,9 @@ public class AuthenticationService {
 
     @NonFinal
     private static final String GRANT_TYPE = "authorization_code";
+
+    @NonFinal
+    private static final String ISSUER = "huumod.com";
 
     final PasswordEncoder passwordEncoder;
     final UserRepository userRepository;
@@ -140,29 +145,28 @@ public class AuthenticationService {
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
+        String username = request.getUsername();
 
-        long locked = loginAttemptService.getLockRemainingSeconds(request.getUsername());
-        if (locked > 0) {
+        if (loginAttemptService.getLockRemainingSeconds(username) > 0) {
             throw new AppException(ErrorCode.TOO_MANY_ATTEMPTS);
         }
 
-        var user = request.getUsername().contains("@")
-                ? userRepository.findByEmail(request.getUsername()).orElse(null)
-                : userRepository.findByUsername(request.getUsername()).orElse(null);
+        User user = (username.contains("@")
+                ? userRepository.findByEmail(username)
+                : userRepository.findByUsername(username)).orElse(null);
 
-        boolean authenticated = user != null
+        boolean authenticated = Objects.nonNull(user)
+                && StringUtils.hasText(user.getPassword())
                 && passwordEncoder.matches(request.getPassword(), user.getPassword());
 
         if (!authenticated) {
-            loginAttemptService.recordFailure(request.getUsername());
+            loginAttemptService.recordFailure(username);
             throw new AppException(ErrorCode.UNAUTHENTICATED);
         }
 
-        loginAttemptService.recordSuccess(request.getUsername());
-        var token = generateToken(user);
-
+        loginAttemptService.recordSuccess(username);
         return AuthenticationResponse.builder()
-                .token(token)
+                .token(generateToken(user))
                 .authenticated(true)
                 .build();
     }
@@ -180,9 +184,9 @@ public class AuthenticationService {
 
         invalidateTokenRepository.save(invalidateToken);
 
-        String username = signedJWT.getJWTClaimsSet().getSubject();
+        String userId = signedJWT.getJWTClaimsSet().getSubject();
 
-        var user = userRepository.findByUsername(username).orElseThrow(
+        var user = userRepository.findById(userId).orElseThrow(
                 () -> new AppException(ErrorCode.UNAUTHENTICATED));
 
         String token = generateToken(user);
@@ -218,7 +222,7 @@ public class AuthenticationService {
 
         JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
                 .subject(user.getId())
-                .issuer("huumod.com")
+                .issuer(ISSUER)
                 .issueTime(new Date())
                 .expirationTime(new Date(Instant.now()
                         .plus(VALIDATION_DURATION, ChronoUnit.SECONDS).toEpochMilli()
@@ -240,26 +244,25 @@ public class AuthenticationService {
     }
 
     public SignedJWT verifyToken(String token, boolean isRefresh) throws JOSEException, ParseException {
-        JWSVerifier verifier = new MACVerifier(SIGN_KEY.getBytes());
-
         SignedJWT signedJWT = SignedJWT.parse(token);
 
-        Date expiryTime = (isRefresh)
-                ? new Date(signedJWT
-                    .getJWTClaimsSet()
-                    .getIssueTime()
-                    .toInstant()
-                    .plus(REFRESHABLE_DURATION, ChronoUnit.SECONDS)
-                    .toEpochMilli())
-                : signedJWT.getJWTClaimsSet().getExpirationTime();
-
-        var verified = signedJWT.verify(verifier);
-
-        if (!(verified && expiryTime.after(new Date()))) {
+        if (!signedJWT.verify(new MACVerifier(SIGN_KEY.getBytes(StandardCharsets.UTF_8))))
             throw new AppException(ErrorCode.UNAUTHENTICATED);
-        }
 
-        if (invalidateTokenRepository.existsById(signedJWT.getJWTClaimsSet().getJWTID()))
+        JWTClaimsSet claims = signedJWT.getJWTClaimsSet();
+
+        if (!ISSUER.equals(claims.getIssuer()))
+            throw new AppException(ErrorCode.UNAUTHENTICATED);
+
+        Date expiryTime = isRefresh
+                ? Date.from(claims.getIssueTime().toInstant()
+                .plus(REFRESHABLE_DURATION, ChronoUnit.SECONDS))
+                : claims.getExpirationTime();
+
+        if (Objects.isNull(expiryTime) || !expiryTime.after(new Date()))
+            throw new AppException(ErrorCode.UNAUTHENTICATED);
+
+        if (invalidateTokenRepository.existsById(claims.getJWTID()))
             throw new AppException(ErrorCode.UNAUTHENTICATED);
 
         return signedJWT;
